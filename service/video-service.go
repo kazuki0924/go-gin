@@ -1,6 +1,10 @@
 package service
 
-import "github.com/kazuki0924/go-gin/entity"
+import (
+	"fmt"
+
+	"github.com/kazuki0924/go-gin/entity"
+)
 
 // VideoService interface
 type VideoService interface {
@@ -23,5 +27,6 @@ func (service *videoService) Save(video entity.Video) entity.Video {
 }
 
 func (service *videoService) FindAll() []entity.Video {
+	fmt.Println(service.videos)
 	return service.videos
 }

@@ -1,6 +1,8 @@
 package controller
 
 import (
+	"fmt"
+
 	"github.com/gin-gonic/gin"
 	"github.com/kazuki0924/go-gin/entity"
 	"github.com/kazuki0924/go-gin/service"
@@ -31,5 +33,6 @@ func (c *controller) Save(ctx *gin.Context) entity.Video {
 	var video entity.Video
 	ctx.BindJSON(&video)
 	c.service.Save(video)
+	fmt.Println(video)
 	return video
 }

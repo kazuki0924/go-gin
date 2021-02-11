@@ -14,7 +14,8 @@ func Logger() gin.HandlerFunc {
 		return fmt.Sprintf("%s - [%s] %s %s %d %s",
 			param.ClientIP,
 			param.TimeStamp.Format(time.RFC822),
-			param.Method,
+			param.TimeStamp.Format(time.RFC822),
+			// param.Method,
 			param.Path,
 			param.StatusCode,
 			param.Latency)
