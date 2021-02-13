@@ -2,7 +2,16 @@
  - using env:	export GIN_MODE=release
  - using code:	gin.SetMode(gin.ReleaseMode)
 
-[GIN-debug] GET    /videos                   --> main.main.func1 (4 handlers)
-[GIN-debug] POST   /videos                   --> main.main.func2 (4 handlers)
+[GIN-debug] GET    /css/*filepath            --> github.com/gin-gonic/gin.(*RouterGroup).createStaticHandler.func1 (1 handlers)
+[GIN-debug] HEAD   /css/*filepath            --> github.com/gin-gonic/gin.(*RouterGroup).createStaticHandler.func1 (1 handlers)
+[GIN-debug] Loaded HTML Templates (4): 
+	- 
+	- footer.html
+	- header.html
+	- index.html
+
+[GIN-debug] GET    /api/videos               --> main.main.func1 (4 handlers)
+[GIN-debug] POST   /api/videos               --> main.main.func2 (4 handlers)
+[GIN-debug] GET    /view/videos              --> github.com/kazuki0924/go-gin/controller.VideoController.ShowAll-fm (4 handlers)
 [GIN-debug] Listening and serving HTTP on :8080
-::1 - [13 Feb 21 15:36 JST] 13 Feb 21 15:36 JST /videos 400 492.951µs::1 - [13 Feb 21 15:37 JST] 13 Feb 21 15:37 JST /videos 400 292.816µs::1 - [13 Feb 21 15:37 JST] 13 Feb 21 15:37 JST /videos 400 77.745µs::1 - [13 Feb 21 15:37 JST] 13 Feb 21 15:37 JST /videos 200 93.853µs::1 - [13 Feb 21 15:37 JST] 13 Feb 21 15:37 JST /videos 400 181.397µs
+::1 - [13 Feb 21 16:07 JST] 13 Feb 21 16:07 JST /view/videos 200 872.23µs::1 - [13 Feb 21 16:07 JST] 13 Feb 21 16:07 JST /api/videos 200 691.884µs::1 - [13 Feb 21 16:07 JST] 13 Feb 21 16:07 JST /view/videos 200 1.052818ms::1 - [13 Feb 21 16:10 JST] 13 Feb 21 16:10 JST /api/videos 200 180.003µs::1 - [13 Feb 21 16:10 JST] 13 Feb 21 16:10 JST /view/videos 200 662.673µs::1 - [13 Feb 21 16:10 JST] 13 Feb 21 16:10 JST /favicon.ico 404 3.888µs
