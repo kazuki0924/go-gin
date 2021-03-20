@@ -3,7 +3,7 @@ package validators
 import (
 	"strings"
 
-	"github.com/go-playground/validator/v10"
+	"gopkg.in/go-playground/validator.v9"
 )
 
 // ValidateCoolTitle func

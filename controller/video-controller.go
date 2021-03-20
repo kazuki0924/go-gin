@@ -4,10 +4,10 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/go-playground/validator/v10"
 	"github.com/kazuki0924/go-gin/entity"
 	"github.com/kazuki0924/go-gin/service"
 	"github.com/kazuki0924/go-gin/validators"
+	"gopkg.in/go-playground/validator.v9"
 )
 
 // VideoController interface
