@@ -1,18 +1,20 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/kazuki0924/go-gin/controller"
 	"github.com/kazuki0924/go-gin/middlewares"
+	"github.com/kazuki0924/go-gin/repository"
 	"github.com/kazuki0924/go-gin/service"
 )
 
 var (
-	videoService service.VideoService = service.New()
+	videoRepository repository.VideoRepository = repository.NewVideoRepository()
+
+	videoService service.VideoService = service.New(videoRepository)
 	loginService service.LoginService = service.NewLoginService()
 	jwtService   service.JWTService   = service.NewJWTService()
 
@@ -29,6 +31,7 @@ func main() {
 
 	// server := gin.Default()
 	// setupLogOutput()
+	defer videoRepository.CloseDB()
 
 	server := gin.New()
 
@@ -65,8 +68,25 @@ func main() {
 		})
 
 		apiRoutes.POST("/videos", func(ctx *gin.Context) {
-			fmt.Println("debug")
 			err := videoController.Save(ctx)
+			if err != nil {
+				ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			} else {
+				ctx.JSON(http.StatusOK, gin.H{"message": "Video Input is valid!!"})
+			}
+		})
+
+		apiRoutes.PUT("/videos/:id", func(ctx *gin.Context) {
+			err := videoController.Update(ctx)
+			if err != nil {
+				ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			} else {
+				ctx.JSON(http.StatusOK, gin.H{"message": "Video Input is valid!!"})
+			}
+		})
+
+		apiRoutes.DELETE("/videos/:id", func(ctx *gin.Context) {
+			err := videoController.Delete(ctx)
 			if err != nil {
 				ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			} else {

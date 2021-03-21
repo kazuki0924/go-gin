@@ -39,7 +39,6 @@ func New(service service.VideoService) VideoController {
 func (c *controller) FindAll() []entity.Video {
 	return c.service.FindAll()
 }
-
 func (c *controller) Save(ctx *gin.Context) error {
 	var video entity.Video
 	err := ctx.ShouldBindJSON(&video)
