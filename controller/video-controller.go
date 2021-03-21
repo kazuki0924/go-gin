@@ -26,7 +26,7 @@ var validate *validator.Validate
 
 // New VideoController
 func New(service service.VideoService) VideoController {
-	// validate = validator.New()
+	validate = validator.New()
 	// validate.RegisterValidation("is-cool", validators.ValidateCoolTitle)
 	return &controller{
 		service: service,
