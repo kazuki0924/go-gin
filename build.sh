@@ -1,4 +1,3 @@
-#!/usr/bin/env bash
 set -xe
 
 go get github.com/gin-gonic/gin
