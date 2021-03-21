@@ -6,7 +6,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/kazuki0924/go-gin/entity"
 	"github.com/kazuki0924/go-gin/service"
-	"github.com/kazuki0924/go-gin/validators"
+
+	// "github.com/kazuki0924/go-gin/validators"
 	"gopkg.in/go-playground/validator.v9"
 )
 
@@ -25,8 +26,8 @@ var validate *validator.Validate
 
 // New VideoController
 func New(service service.VideoService) VideoController {
-	validate = validator.New()
-	validate.RegisterValidation("is-cool", validators.ValidateCoolTitle)
+	// validate = validator.New()
+	// validate.RegisterValidation("is-cool", validators.ValidateCoolTitle)
 	return &controller{
 		service: service,
 	}

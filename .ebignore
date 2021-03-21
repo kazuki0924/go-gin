@@ -1,0 +1,9 @@
+*.go
+go.*
+Buildfile
+Procfile
+Dockerfile
+.gitignore
+*.yaml
+*.sh
+*.log

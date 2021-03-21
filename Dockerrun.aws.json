@@ -1,0 +1,11 @@
+{
+	"AWSEBDockerrunVersion": "1",
+	"Image": {
+		"Name": "kazuki0924/go-gin"
+	},
+	"Ports": [
+		{
+			"ContainerPort": "5000"
+		}
+	]
+}
