@@ -6,3 +6,4 @@
 .DS_Store
 *.log
 go-gin
+test.db

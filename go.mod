@@ -6,6 +6,7 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/gin-gonic/gin v1.6.3
 	github.com/jinzhu/now v1.1.2 // indirect
+	github.com/stretchr/testify v1.7.0 // indirect
 	gopkg.in/go-playground/validator.v9 v9.31.0
 	gorm.io/driver/sqlite v1.1.4
 	gorm.io/gorm v1.21.4
