@@ -1,14 +1,18 @@
 package main
 
 import (
-	"net/http"
 	"os"
 
 	"github.com/gin-gonic/gin"
+	"github.com/kazuki0924/go-gin/api"
 	"github.com/kazuki0924/go-gin/controller"
+	"github.com/kazuki0924/go-gin/docs"
 	"github.com/kazuki0924/go-gin/middlewares"
 	"github.com/kazuki0924/go-gin/repository"
 	"github.com/kazuki0924/go-gin/service"
+
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 var (
@@ -22,87 +26,48 @@ var (
 	loginController controller.LoginController = controller.NewLoginController(loginService, jwtService)
 )
 
-// func setupLogOutput() {
-// 	f, _ := os.Create("gin.log")
-// 	gin.DefaultWriter = io.MultiWriter(f, os.Stdout)
-// }
-
+// @securityDefinitions.apikey bearerAuth
+// @in header
+// @name Authorization
 func main() {
+	// Swagger 2.0 Meta Information
+	docs.SwaggerInfo.Title = "Example gin API"
+	docs.SwaggerInfo.Description = "example gin api"
+	docs.SwaggerInfo.Version = "1.0"
+	docs.SwaggerInfo.Host = "localhost:5000"
+	docs.SwaggerInfo.BasePath = "/api/v1"
+	docs.SwaggerInfo.Schemes = []string{"http", "https"}
 
-	// server := gin.Default()
-	// setupLogOutput()
 	defer videoRepository.CloseDB()
+	server := gin.Default()
 
-	server := gin.New()
+	videoAPI := api.NewVideoAPI(loginController, videoController)
 
-	server.Static("/css", "./templates/css")
-
-	server.LoadHTMLGlob("templates/*.html")
-
-	// server.Use(gin.Recovery(), middlewares.Logger(), middlewares.BasicAuth()) // gindump.Dump()
-	server.Use(gin.Recovery(), middlewares.Logger())
-
-	// server.Use(gin.Logger())
-
-	// server.GET("/test", func(ctx *gin.Context) {
-	// 	ctx.JSON(200, gin.H{
-	// 		"message": "OK!!",
-	// 	})
-	// })
-
-	server.POST("/login", func(ctx *gin.Context) {
-		token := loginController.Login(ctx)
-		if token != "" {
-			ctx.JSON(http.StatusOK, gin.H{
-				"token": token,
-			})
-		} else {
-			ctx.JSON(http.StatusUnauthorized, nil)
+	apiRoutes := server.Group(docs.SwaggerInfo.BasePath)
+	{
+		login := apiRoutes.Group("/auth")
+		{
+			login.POST("/token", videoAPI.Authenticate)
 		}
-	})
 
-	apiRoutes := server.Group("/api", middlewares.AuthorizeJWT())
-	{
-		apiRoutes.GET("/videos", func(ctx *gin.Context) {
-			ctx.JSON(200, videoController.FindAll())
-		})
-
-		apiRoutes.POST("/videos", func(ctx *gin.Context) {
-			err := videoController.Save(ctx)
-			if err != nil {
-				ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			} else {
-				ctx.JSON(http.StatusOK, gin.H{"message": "Video Input is valid!!"})
-			}
-		})
-
-		apiRoutes.PUT("/videos/:id", func(ctx *gin.Context) {
-			err := videoController.Update(ctx)
-			if err != nil {
-				ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			} else {
-				ctx.JSON(http.StatusOK, gin.H{"message": "Video Input is valid!!"})
-			}
-		})
-
-		apiRoutes.DELETE("/videos/:id", func(ctx *gin.Context) {
-			err := videoController.Delete(ctx)
-			if err != nil {
-				ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			} else {
-				ctx.JSON(http.StatusOK, gin.H{"message": "Video Input is valid!!"})
-			}
-		})
-	}
-	viewRoutes := server.Group("/view")
-	{
-		viewRoutes.GET("/videos", videoController.ShowAll)
+		videos := apiRoutes.Group("/videos", middlewares.AuthorizeJWT())
+		{
+			videos.GET("", videoAPI.GetVideos)
+			videos.POST("", videoAPI.CreateVideo)
+			videos.PUT(":id", videoAPI.UpdateVideo)
+			videos.DELETE(":id", videoAPI.DeleteVideo)
+		}
 	}
 
+	server.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
+	// We can setup this env variable from the EB console
 	port := os.Getenv("PORT")
+
+	// Elastic Beanstalk forwards requests to port 5000
 	if port == "" {
 		port = "5000"
 	}
-
 	server.Run(":" + port)
+
 }
